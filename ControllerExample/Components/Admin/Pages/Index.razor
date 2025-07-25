@@ -1,6 +1,7 @@
-﻿@page "/"
+@page "/"
 @rendermode InteractiveServer
 @inject HttpClient Http
+@inject ILogger<Index> Logger
 @using ControllerExample.Shared
 
 <h1>Welcome</h1>
@@ -14,14 +15,23 @@
 @code {
     private string apiResponse = "";
 
+    protected override void OnInitialized()
+    {
+        Logger.LogInformation("Index page initialized");
+    }
+
     private async Task CallApi()
     {
+        Logger.LogInformation("Calling API /api/example/hello");
+
         try
         {
-            apiResponse = await Http.GetStringAsync("api/example/hello");
+            apiResponse = await Http.GetStringAsync("/api/example/hello");
+            Logger.LogInformation("API response: {Response}", apiResponse);
         }
         catch (Exception ex)
         {
+            Logger.LogError(ex, "Error calling API");
             apiResponse = $"Error: {ex.Message}";
         }
     }
