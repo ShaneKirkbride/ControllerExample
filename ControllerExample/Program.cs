@@ -1,4 +1,4 @@
-﻿using ControllerExample.Components.Admin;
+using ControllerExample.Components.Admin;
 using ControllerExample.Data.Weather;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +8,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents(); // Enables SignalR-based interactivity..ahem...
 
 builder.Services.AddControllers();
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("local", client =>
+{
+    var baseUrl = builder.Configuration["urls"] ?? "http://localhost:5000";
+    client.BaseAddress = new Uri(baseUrl);
+});
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("local"));
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
