@@ -1,0 +1,28 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject HttpClient Http
+@using ControllerExample.Shared
+
+<h1>Welcome</h1>
+
+<ExampleSharedComponent Title="Welcome from Index" />
+
+<button class="btn btn-primary" @onclick="CallApi">Call Controller</button>
+
+<p>@apiResponse</p>
+
+@code {
+    private string apiResponse = "";
+
+    private async Task CallApi()
+    {
+        try
+        {
+            apiResponse = await Http.GetStringAsync("api/example/hello");
+        }
+        catch (Exception ex)
+        {
+            apiResponse = $"Error: {ex.Message}";
+        }
+    }
+}
