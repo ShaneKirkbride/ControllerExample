@@ -8,12 +8,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents(); // Enables SignalR-based interactivity..ahem...
 
 builder.Services.AddControllers();
-builder.Services.AddHttpClient("local", client =>
-{
-    var baseUrl = builder.Configuration["ASPNETCORE_URLS"] ?? "http://localhost:5000";
-    client.BaseAddress = new Uri(baseUrl);
-});
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("local"));
+builder.Services.AddHttpClient();
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient());
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
@@ -38,3 +34,5 @@ app.MapRazorComponents<App>()
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
