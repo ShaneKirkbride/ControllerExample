@@ -1,4 +1,4 @@
-using ControllerExample.Components.Admin;
+using ControllerExample.Components;
 using ControllerExample.Data.Weather;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +10,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddControllers();
 builder.Services.AddHttpClient("local", client =>
 {
-    var baseUrl = builder.Configuration["urls"] ?? "http://localhost:5000";
+    var baseUrl = builder.Configuration["ASPNETCORE_URLS"] ?? "http://localhost:5000";
     client.BaseAddress = new Uri(baseUrl);
 });
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("local"));
